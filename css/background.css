@@ -1,0 +1,38 @@
+#web_bg {
+    /* 背景图像的地址（url括号里）  */
+    background: url(https://s2.loli.net/2022/07/02/ZG3FdQ5hOYlypxB.webp);
+    /* 背景图像不重复 */
+    background-repeat: no-repeat;
+    /* 背景图像大小 */
+    background-size: cover;
+  }
+  /* 文章页背景 */
+  .layout_post>#post {
+    /* 以下代表透明度为0.5 可以自行修改*/
+    background: rgba(255,255,255,0.5);
+  }
+  
+  /* 所有页面背景 */
+  #aside_content .card-widget, #recent-posts>.recent-post-item, .layout_page>div:first-child:not(.recent-posts), .layout_post>#page, .layout_post>#post, .read-mode .layout_post>#post{
+    /* 以下代表透明度为0.5 */
+    background: rgba(255,255,255,0.5);
+  }
+  #footer {
+      background: rgba(255,255,255,0);
+      color: #000;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      backdrop-filter: saturate(100%) blur(5px)
+  }
+  
+  #footer::before {
+      background: rgba(255,255,255,0)
+  }
+  
+  #footer #footer-wrap {
+      color: var(--font-color)
+  }
+  
+  #footer #footer-wrap a {
+      color: var(--font-color)
+  }
