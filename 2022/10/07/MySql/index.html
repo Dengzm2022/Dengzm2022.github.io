@@ -1,0 +1,342 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>MySql | 张佩服的Blog</title><meta name="keywords" content="MySql"><meta name="author" content="Dengzm2022"><meta name="copyright" content="Dengzm2022"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="数据库 1 事务的特性和隔离级别 1234567891011121314151617181920212223**事务的特性：  原子性（Atomicity）指事务不可分割，要么都成功,要么都失败  一致性（Consistency） 事务必须使数据库从一个一致性状态变换到另外一个一致性状态  隔离性（Isolation）事务的隔离性是指一个事务的执行不能被其他事务干扰  持久性（Durability">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySql">
+<meta property="og:url" content="http://dengzm2022.github.io/2022/10/07/MySql/index.html">
+<meta property="og:site_name" content="张佩服的Blog">
+<meta property="og:description" content="数据库 1 事务的特性和隔离级别 1234567891011121314151617181920212223**事务的特性：  原子性（Atomicity）指事务不可分割，要么都成功,要么都失败  一致性（Consistency） 事务必须使数据库从一个一致性状态变换到另外一个一致性状态  隔离性（Isolation）事务的隔离性是指一个事务的执行不能被其他事务干扰  持久性（Durability">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg">
+<meta property="article:published_time" content="2022-10-07T15:22:31.000Z">
+<meta property="article:modified_time" content="2022-10-07T15:57:41.920Z">
+<meta property="article:author" content="Dengzm2022">
+<meta property="article:tag" content="MySql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2022/07/02/wevdzYikc6EoaXn.jpg"><link rel="canonical" href="http://dengzm2022.github.io/2022/10/07/MySql/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-right"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'MySql',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2022-10-07 23:57:41'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 6.2.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s2.loli.net/2022/07/02/wevdzYikc6EoaXn.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">张佩服的Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">MySql</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon fas fa-history"></i><span class="post-meta-label">更新于</span><time datetime="2022-10-07T15:57:41.920Z" title="更新于 2022-10-07 23:57:41">2022-10-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaEE/">JavaEE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="MySql"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>数据库</h1>
+<h2 id="1-事务的特性和隔离级别">1 事务的特性和隔离级别</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">**事务的特性：</span><br><span class="line">  原子性（Atomicity）指事务不可分割，要么都成功,要么都失败</span><br><span class="line">  一致性（Consistency） 事务必须使数据库从一个一致性状态变换到另外一个一致性状态</span><br><span class="line">  隔离性（Isolation）事务的隔离性是指一个事务的执行不能被其他事务干扰</span><br><span class="line">  持久性（Durability）持久性是指一个事务一旦被提交，它对数据库中数据的改变就是永久性的</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">**隔离级别：</span><br><span class="line">未提交读read uncommitted</span><br><span class="line">		会发生 脏读、不可重复读、虚读</span><br><span class="line">已提交读read committed			//Oracle   	SQL Server（系统事务）</span><br><span class="line">		解决脏读，但是不可重复读和虚读有可能发生</span><br><span class="line">重复读repeatable read		//Mysql</span><br><span class="line">		解决脏读和不可重复读，但是虚读有可能发生.</span><br><span class="line">串行化serializable (只有读读可以并发,读写和写写都会阻塞)</span><br><span class="line">		避免脏读，不可重复读，虚读的发生</span><br><span class="line"></span><br><span class="line">不考虑隔离性会产生的问题：		</span><br><span class="line">    脏读:读到了别的事务回滚前的脏数据</span><br><span class="line">    不可重复读:在一个事务的两次查询中数据不一致,可能是两次查询过程中,数据被更新了</span><br><span class="line">    幻读:事务两次查询得到的数据个数不一致,中途被其他事务插入了几行数据</span><br><span class="line"></span><br><span class="line">rr读到的是可重复的,为什么update能更新到最新?  update会加锁,会首先做一个当前读</span><br></pre></td></tr></table></figure>
+<h2 id="2-谈谈你对MySQL索引的理解">2 谈谈你对MySQL索引的理解**</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">    MySQL索引的底层数据结构是通过B+树或hash表来实现的,对于不同类型的数据结构是和存储引擎相关的。如果使用的是InnoDB或MyISAM存储引擎,对应的底层数据结构是B+树,如果使用的是Memory存储引擎,对应的底层数据结构是hash表。</span><br><span class="line">    一般,我们是根据某个key去找到value,key就是我们索引的某个列的值,value就是这一行的数据。当我们选择用k-v格式存储的时候,可以选择用hash表、二叉树、AVL树、红黑树。但是这最终都会导致树变高，树变高会影响磁盘I/O次数增加，从而导致访问的效率变低。所以选择使用B+树的结构，可以在某一个数据节点里面尽可能多的去存储数据，让树变低，从而减少磁盘I/O的次数，提高访问效率。</span><br><span class="line">    同时，在MySQL中有普通索引[index]、唯一索引[unique]、主键索引[primary key]、组合索引、全文索引[fulltext]等各种分类，我们用到的最多的是主键索引和组合索引，但在使用时，会存在回表、覆盖索引、最左匹配、索引下推等细节问题。</span><br><span class="line">    我们还可以通过索引来对SQL语句进行优化，提高我们对数据的访问效率</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">回表: 从某一个索引的叶子节点中获取聚簇索引的id值,根据id再去聚簇索引中获取全量数据</span><br><span class="line">索引覆盖: 从索引的叶子节点中能获取到全量查询列的过程</span><br><span class="line">最左原则: 最左优先，以最左边的为起点任何连续的索引都能匹配上。同时遇到范围查询(&gt;、&lt;、between、like)就会停止匹配。</span><br><span class="line">索引下推: 索引下推是数据库检索数据过程中为减少回表次数而做的优化</span><br></pre></td></tr></table></figure>
+<h2 id="3-MySQL为什么采用B-树而不是B树">3 MySQL为什么采用B+树而不是B树?</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1.从磁盘I/O效率来看:</span><br><span class="line">	B+树的非叶子节点不存储数据,所以树的每一层能存储更多的索引数据,间接地减少了磁盘I/O的次数,提高查询效率</span><br><span class="line">2.从范围查询效率来看:</span><br><span class="line">	MySQL对B+数的优化,使B+树存储在叶子节点的数据使用双向链表来关联,因此B+树查询只需要查询两个叶子节点进行遍历就行,而B树要查询	所有节点进行遍历,因此B+树范围查询效率高</span><br><span class="line">3.从全表扫描来看:</span><br><span class="line">	因为B+树叶子节点存储了所有数据,所以只需要扫描所有的叶子节点进行遍历,而B树要遍历整个树</span><br></pre></td></tr></table></figure>
+<h2 id="4-聚簇索引和非聚簇索引（聚集索引和非聚集索引）">4 聚簇索引和非聚簇索引（聚集索引和非聚集索引）**</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">聚簇索引的叶子节点存储的是行数据,索引和数据紧密联系,可以通过聚簇索引直接查询到数据</span><br><span class="line">非聚簇索引的叶子节点存储的是主键信息,因此需要回表查询,所以聚簇索引的查询效率高</span><br><span class="line"></span><br><span class="line">在InnoDB存储引擎中,既存在聚簇索引,又存在非聚簇索引</span><br><span class="line">在MyISAM存储引擎中,只有非聚簇索引,因为它的叶子节点存储的是地址</span><br></pre></td></tr></table></figure>
+<h2 id="5-MySQL日志">5 MySQL日志</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>binlog</span><br><span class="line">	binlog 用于记录数据库执行的写入性操作[不包括查询信息]，以二进制的形式保存在磁盘中。</span><br><span class="line">	<span class="comment">//使用场景</span></span><br><span class="line">	主从复制 ：在 Master 端开启 binlog ，然后将 binlog发送到各个 Slave 端， Slave 端重放 binlog 从而达到主从数据一致。</span><br><span class="line">	数据恢复 ：通过使用 mysqlbinlog 工具来恢复数据。</span><br><span class="line"><span class="number">2.</span>redo log</span><br><span class="line">    实现ACID中的持久性,保证提交数据不丢失</span><br><span class="line">    事务提交时,首先将redo log记录变更,事务就会视为成功</span><br><span class="line"><span class="number">3.</span>undo log</span><br><span class="line">    回滚数据</span><br><span class="line">    多版本并发控制: 快照读(一致性)可重复读</span><br><span class="line">    每条数据修改(insert、update或delete)操作都伴随一条undo log的生成,并且回滚日志必须先于数据持久化到磁盘上</span><br></pre></td></tr></table></figure>
+<h2 id="6-sql优化">6 sql优化**</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">1. select子句中避免使用‘*’</span><br><span class="line">2. 避免在索引列上使用计算，not，in和&lt;&gt;等操作</span><br><span class="line">3. 当只需要一行数据的时候使用limit 1</span><br><span class="line">4. 保证表单数据不超过200w，适时分割表</span><br><span class="line">5. 针对查询较慢的语句，可以使用explain来分析该语句具体的执行情况</span><br><span class="line">6. 避免查询时判断null，否则可能会导致全表扫描，无法使用索引;</span><br><span class="line">7. 避免like查询，否则可能导致全表扫描，可以考虑使用全文索引</span><br><span class="line">8. 能用union all的时候就不用union，union过滤重复数据要耗费更多的CPU资源</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="7-索引失效-（七种）">7 索引失效***（七种）</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 如果条件中有or，即使其中有部分条件带索引也不会使用(这也是为什么尽量少用or的原因)，例子中user_id无索引。注意：要想使用or，又想让索引生效，只能将or条件中的每个列都加上索引</span><br><span class="line">2. 对于复合索引，如果不使用前列，后续列也将无法使用，类电话簿。</span><br><span class="line">3. like查询是以%开头</span><br><span class="line">4. 存在索引列的数据类型隐形转换，则用不上索引，比如列类型是字符串，那一定要在条件中将数据使用引号引用起来,否则不使用索引</span><br><span class="line">5. where 子句里对索引列上有数学运算，用不上索引</span><br><span class="line">6. where 子句里对有索引列使用函数，用不上索引</span><br><span class="line">7. 如果mysql估计使用全表扫描要比使用索引快,则不使用索引</span><br></pre></td></tr></table></figure>
+<h2 id="8-三范式">8 三范式**</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">第一范式：强调的是列的原子性，即数据库表的每一列都是不可分割的原子数据项。</span><br><span class="line">第二范式：要求实体的属性完全依赖于主关键字。所谓完全依赖是指不能存在仅依赖主关键字一部分的属性。</span><br><span class="line">第三范式：任何非主属性不依赖于其它非主属性。</span><br></pre></td></tr></table></figure>
+<h2 id="9-乐观锁和悲观锁">9 乐观锁和悲观锁**</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">乐观锁:无需加锁,每次只有一个线程能成功修改共享变量,其他失败的不停止,不断重试直至成功</span><br><span class="line"></span><br><span class="line">悲观锁:线程只有占了锁,才能去操作变量,每次只有一个线程占锁成功,获取锁失败的线程,都得停下来等待</span><br><span class="line"></span><br><span class="line">高并发下，如何做到安全的修改同一行数据</span><br><span class="line">使用悲观锁 悲观锁本质是当前只有一个线程执行操作，结束了唤醒其他线程进行处理。也可以缓存队列中锁定主键。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="10-主键使用自增ID还是UUID">10 主键使用自增ID还是UUID?</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">推荐自增ID,因为在InnoDB存储引擎中,主键是作为聚簇索引存在的,也就是说,主键索引的B+树叶子节点上存储了主键索引及全部的数据(按照顺序),如果主键使用自增ID,那么只需要不断向后排列即可,如果是UUID,想要顺序存储,则需要数据移动,会产生很多内存碎片,造成插入性能下降</span><br></pre></td></tr></table></figure>
+<h2 id="11-Mysql的体系结构">11 Mysql的体系结构**</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//连接层 </span></span><br><span class="line">最上层是一些客户端和链接服务，包含本地sock 通信和大多数基于客户端/服务端工具实现的类似于 TCP/IP的通 信。主要完成一些类似于连接处理、授权认证、及相关的安全方案。在该层上引入了线程池的概念，为通过认证安全接入的客户端提供线程。同样在该层上可以实现基于SSL的安全链接。服务器也会为安全接入的每个客户端验证 它所具有的操作权限。 </span><br><span class="line"><span class="comment">//服务层</span></span><br><span class="line">第二层架构主要完成大多数的核心服务功能，如SQL接口，并完成缓存的查询，SQL的分析和优化，部分内置函数的执行。所有跨存储引擎的功能也在这一层实现，如 过程、函数等。在该层，服务器会解析查询并创建相应的内部 解析树，并对其完成相应的优化如确定表的查询的顺序，是否利用索引等， 最后生成相应的执行操作。如果是 select语句，服务器还会查询内部的缓存，如果缓存空间足够大，这样在解决大量读操作的环境中能够很好的提升系统的性能。 </span><br><span class="line"><span class="comment">//引擎层 </span></span><br><span class="line">存储引擎层，存储引擎真正的负责了MySQL中数据的存储和提取， </span><br><span class="line"><span class="comment">//存储层 </span></span><br><span class="line">服务器通过API和存储引擎进行通信。不同的存储引擎具有不同的功能，这样我们可以根据自己的需要，来选取合适的存储引擎。</span><br><span class="line">数据存储层，主要是将数据存储在文件系统之上，并完成与存储引擎的交互。和其他数据库相比，MySQL有点与众不同，它的架构可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎上，插件式的存储引擎架构，将查询处理和其他的系统任务以及数据的存储提取分离。这种架构可以根据业务的需求和实际需要选择合适的存储引擎。</span><br></pre></td></tr></table></figure>
+<h2 id="12-两表关联">12 两表关联**</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1、INNER JOIN （内连接）      -----只返回两个表中连接字段相等的行</span><br><span class="line">2、LEFT OUTER JOIN （左连接） -----返回包括左表中的所有记录和右表中连接字段相等的记录</span><br><span class="line">3、RIGHT OUTER JOIN （右连接）-----返回包括右表中的所有记录和左表中连接字段相等的记录</span><br><span class="line">4、union      ------作用很简单用来合并两条sql的结果集</span><br></pre></td></tr></table></figure>
+<h2 id="13-mysql常用函数">13 mysql常用函数</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CONCAT(s1,s2…sn)字符串 s1,s2 等多个字符串合并为一个字符串</span><br><span class="line">case when  类似于编程语言中的if else判断、switch case语句。该语句执行时先对条件进行判断，然后根据判断结果做出相应的操作</span><br><span class="line">FORMAT(x,n)函数  可以将数字x进行格式化，将x保留到小数点后n位</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://dengzm2022.github.io">Dengzm2022</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://dengzm2022.github.io/2022/10/07/MySql/">http://dengzm2022.github.io/2022/10/07/MySql/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://dengzm2022.github.io" target="_blank">张佩服的Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MySql/">MySql</a></div><div class="post_share"><div class="social-share" data-image="https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/10/07/%E9%9D%A2%E8%AF%95%E9%87%8D%E7%82%B9/"><img class="next-cover" src="https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">面试重点</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div><div id="comment-switch"><span class="first-comment">Livere</span><span class="switch-btn"></span><span class="second-comment">Valine</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81NjczOS8zMzIwMw=="></div></div><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s2.loli.net/2022/07/02/wevdzYikc6EoaXn.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Dengzm2022</div><div class="author-info__description">再见少年拉满弓&#44;不惧岁月不惧风</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Dengzm2022"><i class="fab fa-github"></i><span>我的 Github</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Blog Blog , I am here</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BA%8B%E5%8A%A1%E7%9A%84%E7%89%B9%E6%80%A7%E5%92%8C%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-number">1.1.</span> <span class="toc-text">1 事务的特性和隔离级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%B0%88%E8%B0%88%E4%BD%A0%E5%AF%B9MySQL%E7%B4%A2%E5%BC%95%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-number">1.2.</span> <span class="toc-text">2 谈谈你对MySQL索引的理解**</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-MySQL%E4%B8%BA%E4%BB%80%E4%B9%88%E9%87%87%E7%94%A8B-%E6%A0%91%E8%80%8C%E4%B8%8D%E6%98%AFB%E6%A0%91"><span class="toc-number">1.3.</span> <span class="toc-text">3 MySQL为什么采用B+树而不是B树?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E5%92%8C%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%EF%BC%88%E8%81%9A%E9%9B%86%E7%B4%A2%E5%BC%95%E5%92%8C%E9%9D%9E%E8%81%9A%E9%9B%86%E7%B4%A2%E5%BC%95%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">4 聚簇索引和非聚簇索引（聚集索引和非聚集索引）**</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-MySQL%E6%97%A5%E5%BF%97"><span class="toc-number">1.5.</span> <span class="toc-text">5 MySQL日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-sql%E4%BC%98%E5%8C%96"><span class="toc-number">1.6.</span> <span class="toc-text">6 sql优化**</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%EF%BC%88%E4%B8%83%E7%A7%8D%EF%BC%89"><span class="toc-number">1.7.</span> <span class="toc-text">7 索引失效***（七种）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E4%B8%89%E8%8C%83%E5%BC%8F"><span class="toc-number">1.8.</span> <span class="toc-text">8 三范式**</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E4%B9%90%E8%A7%82%E9%94%81%E5%92%8C%E6%82%B2%E8%A7%82%E9%94%81"><span class="toc-number">1.9.</span> <span class="toc-text">9 乐观锁和悲观锁**</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E4%B8%BB%E9%94%AE%E4%BD%BF%E7%94%A8%E8%87%AA%E5%A2%9EID%E8%BF%98%E6%98%AFUUID"><span class="toc-number">1.10.</span> <span class="toc-text">10 主键使用自增ID还是UUID?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-Mysql%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">1.11.</span> <span class="toc-text">11 Mysql的体系结构**</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E4%B8%A4%E8%A1%A8%E5%85%B3%E8%81%94"><span class="toc-number">1.12.</span> <span class="toc-text">12 两表关联**</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-mysql%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0"><span class="toc-number">1.13.</span> <span class="toc-text">13 mysql常用函数</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/10/07/MySql/" title="MySql"><img src="https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MySql"/></a><div class="content"><a class="title" href="/2022/10/07/MySql/" title="MySql">MySql</a><time datetime="2022-10-07T15:22:31.000Z" title="发表于 2022-10-07 23:22:31">2022-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/07/%E9%9D%A2%E8%AF%95%E9%87%8D%E7%82%B9/" title="面试重点"><img src="https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="面试重点"/></a><div class="content"><a class="title" href="/2022/10/07/%E9%9D%A2%E8%AF%95%E9%87%8D%E7%82%B9/" title="面试重点">面试重点</a><time datetime="2022-10-07T11:33:51.000Z" title="发表于 2022-10-07 19:33:51">2022-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/18/%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%8C/" title="面试题二"><img src="https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="面试题二"/></a><div class="content"><a class="title" href="/2022/09/18/%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BA%8C/" title="面试题二">面试题二</a><time datetime="2022-09-18T12:07:20.000Z" title="发表于 2022-09-18 20:07:20">2022-09-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/09/18/%E9%9D%A2%E8%AF%95%E9%A2%98/" title="面试题"><img src="https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="面试题"/></a><div class="content"><a class="title" href="/2022/09/18/%E9%9D%A2%E8%AF%95%E9%A2%98/" title="面试题">面试题</a><time datetime="2022-09-18T12:03:49.000Z" title="发表于 2022-09-18 20:03:49">2022-09-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/07/31/JavaEE_Collection/" title="JavaEE_Collection"><img src="https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaEE_Collection"/></a><div class="content"><a class="title" href="/2022/07/31/JavaEE_Collection/" title="JavaEE_Collection">JavaEE_Collection</a><time datetime="2022-07-31T10:26:03.000Z" title="发表于 2022-07-31 18:26:03">2022-07-31</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://s2.loli.net/2022/11/16/SYKguescT5QxD6V.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2022 By Dengzm2022</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">再见少年拉满弓&#44;不惧岁月不惧风</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="聊天"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadLivere () {
+  if (typeof LivereTower === 'object') {
+    window.LivereTower.init()
+  }
+  else {
+    (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+  }
+}
+
+if ('Livere' === 'Livere' || !true) {
+  if (true) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+  else loadLivere()
+}
+else {
+  function loadOtherComment () {
+    loadLivere()
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'oVIFJKTtshmeJxzLo8DPUYyP-MdYXbMMI',
+      appKey: 'WA2yOsusWy9K3bzJsqlYgKYa',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Livere' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><div class="aplayer no-destroy" data-id="3136952023" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="true"> </div><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="Blog,Blog,我在" data-fontsize="15px" data-random="false" async="async"></script><script src="//code.tidio.co/3brvxoobajzui7vajovvqggd5gspcr7w.js" async="async"></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"]):not([href="/music/"]):not([href="/no-pjax/"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start -->
+  <script data-pjax src="https://cdn.jsdelivr.net/gh/Zfour/hexo-github-calendar@1.21/hexo_githubcalendar.js"></script>
+  <script data-pjax>
+        function GithubCalendarConfig(){
+            var git_githubapiurl ="https://python-github-calendar-api.vercel.app/api?Dengzm2022";
+            var git_color =['#ebedf0', '#f0fff4', '#dcffe4', '#bef5cb', '#85e89d', '#34d058', '#28a745', '#22863a', '#176f2c', '#165c26', '#144620'];
+            var git_user ="Dengzm2022";
+            var parent_div_git = document.getElementById('recent-posts');
+            var git_div_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><div id="github_loading" style="width:10%;height:100%;margin:0 auto;display: block"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg></div><div id="github_container"></div></div>';
+            if(parent_div_git && location.pathname =='/'){
+                console.log('已挂载github calendar')
+                // parent_div_git.innerHTML=git_div_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",git_div_html) // 有报错，但不影响使用(支持pjax跳转)
+            };
+            GithubCalendar(git_githubapiurl,git_color,git_user)
+        }
+        if(document.getElementById('recent-posts')){
+            GithubCalendarConfig()
+        }
+    </script>
+    <style>#github_container{min-height:280px}@media screen and (max-width:650px) {#github_container{background-image:;min-height:0px}}</style>
+    <style></style><!-- hexo injector body_end end --></body></html>
