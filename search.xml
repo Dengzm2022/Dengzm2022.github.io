@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>JRebel热部署</title>
+      <link href="/2022/12/23/JRebel%E7%83%AD%E9%83%A8%E7%BD%B2/"/>
+      <url>/2022/12/23/JRebel%E7%83%AD%E9%83%A8%E7%BD%B2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="JRebel安装及激活">JRebel安装及激活</h2><p>参考文档：<a href="http://www.javatiku.cn/idea/51.html">http://www.javatiku.cn/idea/51.html</a></p><h2 id="JRebel配置与使用">JRebel配置与使用</h2><p>1.进入Idea setting -&gt;勾上自动编译功能</p><p><img src="https://s2.loli.net/2022/12/23/g7qu5EhIDsZynwb.png" alt="Jrebel设置.png"></p><p>2.点击JRebel面板勾选上需要热部署的模块</p><p><img src="https://s2.loli.net/2022/12/23/3uOqcRy6iCQPpYS.png" alt="image.png"></p><p>3.启动项目时使用JRebel启动即可</p><p><img src="https://s2.loli.net/2022/12/23/EfoQ1XOdmjJ54Ls.png" alt="image.png"></p><p>4.当项目修改后，使用Ctrl+S保存可使项目立即修改生效，当控制栏出现以下信息后，热部署成功</p><p><img src="https://s2.loli.net/2022/12/23/VEjuaCFhOesXoMR.png" alt="d51e366680edd70bced61402783e427.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Plugin </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Jrebel </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Jwt+token+redis+springSecurity---实现用户登录功能</title>
       <link href="/2022/03/30/Jwt+token+redis+springSecurity---%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD/"/>
       <url>/2022/03/30/Jwt+token+redis+springSecurity---%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD/</url>
